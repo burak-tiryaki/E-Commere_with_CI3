@@ -15,13 +15,6 @@ class ProductController extends CI_Controller{
         
         $this->load->library('cart');
         $this->load->model('ProductModel');
-
-        $this->session->set_userdata(array(
-            'auth_user' => array(
-                'user_id' => 2
-            )
-        ));
-
     }
 
     public function index()

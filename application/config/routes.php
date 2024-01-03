@@ -53,8 +53,12 @@ $route['default_controller'] = 'welcome';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
 
+//Product showroom
 $route['products']['GET'] = 'ProductController/index';
 
+$route['filteredProduct']['GET'] = 'ProductController/filterProduct';
+
+// Cart set
 $route['insertCart']['POST'] = 'CartController/insertCart';
 
 $route['cart']['GET'] = 'CartController/index';
@@ -64,4 +68,43 @@ $route['updateCart']['POST'] = 'CartController/updateCart';
 $route['deleteOneCart/(:num)'] = 'CartController/deleteOneCart/$1';
 $route['deleteAllCart'] = 'CartController/deleteAllCart';
 
-$route['filteredProduct']['GET'] = 'ProductController/filterProduct';
+
+//Login End Register for user and Admin
+$route['register']['GET'] = 'Auth/RegisterController/index';
+$route['register']['POST'] = 'Auth/RegisterController/register';
+
+$route['login']['GET'] = 'Auth/LoginController/index';
+$route['login']['POST'] = 'Auth/LoginController/login';
+
+$route['userpage']['GET'] = 'UserController/index';
+
+$route['adminpage']['GET'] = 'AdminController/index';
+
+$route['logout']['GET'] = 'Auth/LogoutController/logout';
+
+$route['403']['GET'] = 'PageController/accessdenied';
+
+//order checkout & complete
+$route['checkoutCart']['GET'] = 'CartController/checkoutCart';
+
+$route['orderSuccess/(:num)']['GET'] = 'PageController/orderSuccess/$1';
+
+$route['completeOrder/(:num)']['GET'] = 'AdminController/orderComplete/$1';
+
+// admin update user
+$route['getUpdateUser/(:num)']['GET'] = 'AdminController/getUpdateUser/$1';
+$route['setUpdateUser']['POST'] = 'AdminController/setUpdateUser';
+
+$route['deleteUser/(:num)']['GET'] = 'AdminController/deleteUser/$1';
+
+//admin Product
+$route['getAddProduct']['GET'] = 'AdminController/getAddProduct';
+$route['addProduct']['POST'] = 'AdminController/addProduct';
+
+$route['updateProduct/(:num)']['GET'] = 'AdminController/getUpdateProduct/$1';
+$route['setUpdateProduct']['POST'] = 'AdminController/setUpdateProduct';
+$route['setProductStatus/(:num)']['GET'] = 'AdminController/setProductStatus/$1';
+
+//User, userUpdate
+$route['userUpdate']['POST'] = 'UserController/userUpdate';
+

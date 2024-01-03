@@ -4,19 +4,39 @@
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse d-flex justify-content-between" id="navbarNav">
-      <ul class="navbar-nav">
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
         <li class="nav-item">
           <a class="nav-link" aria-current="page" href="<?= base_url('/')?>">Home</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="<?= base_url('products')?>">Products</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Pricing</a>
-        </li>
-      </ul>
+        <!-- User/admin section start -->
+        <?php if(!$this->session->userdata('authenticated')): ?>
 
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url('register') ?>"><b>SignUp</b></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?php echo base_url('login') ?>"><b>Login</b></a>
+        </li>
+        <?php endif; ?>
+
+        <li class="nav-item">
+        <a class="nav-link" href="<?php echo base_url('userpage') ?>">Userpage</a>
+        </li>
+
+        <?php if($this->session->userdata('authenticated') && 
+              $this->session->userdata('authenticated') == 2){ ?>
+        <li class="nav-item">
+        <a class="nav-link" href="<?php echo base_url('adminpage') ?>">Adminpage</a>
+        </li>
+        <?php } ?>
+
+      </ul>
+      
+      <!-- Cart -->
       <ul class="navbar-nav">
         <li class="nav-item">
           <a class="nav-link" href="<?= base_url('cart')?>">
@@ -24,17 +44,25 @@
           </a>
         </li>
       </ul>
-      <!-- <div class="btn-group dropstart navbar-nav">
-        <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-            Cart
-        </button>
-        <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Action two</a></li>
-            <li><a class="dropdown-item" href="#">Action three</a></li>
-        </ul>
-        </div>
-    </div> -->
+      
+      <!-- Logout -->
+      <?php if($this->session->userdata('authenticated')): ?>
+      <ul class="navbar-nav">
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <?php if(!empty($this->session->userdata('auth_user'))){
+              echo $this->session->userdata('auth_user')["name"].' ';
+              echo $this->session->userdata('auth_user')["surname"]; 
+            } ?>
+            
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="<?= base_url('logout') ?>">Logout</a></li>
+          </ul>
+        </li>
+      </ul>
+      <?php endif; ?>
 
   </div>
 </nav>

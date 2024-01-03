@@ -41,4 +41,42 @@ class ProductModel extends CI_Model{
     
         return $this->db->get()->result();
     }
+
+    public function addProduct($data = array())
+    {
+
+        $this->db->insert('products',$data);
+
+        return $this->db->insert_id();
+
+    }
+
+    public function setImageUrl($productId,$imageUrl)
+    {
+        $this->db
+            ->set('product_imageurl',$imageUrl)
+            ->where('product_id',$productId)
+            ->update('products');
+    }
+
+    public function updateProduct($data)
+    {
+        $this->db
+            ->where('product_id',$data["product_id"])
+            ->update('products',$data);
+    }
+
+    public function setProductStatusReverse($productId)
+    {
+        $productStatus = $this->getOneProduct('products','product_isActive',array("product_id"=>$productId));
+
+        if($productStatus->product_isActive == 1)
+            $this->db->set('product_isActive',0);
+        else
+            $this->db->set('product_isActive',1);
+        
+        $this->db
+        ->where('product_id',$productId)
+        ->update('products');
+    }
 }

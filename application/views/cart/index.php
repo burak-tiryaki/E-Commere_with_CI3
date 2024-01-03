@@ -81,10 +81,8 @@
                     </tfoot>
                 </table>
             </div>
-            
-
                 
-                <a href="#" class="btn btn-lg btn-success mt-3">Checkout</a>
+                <a href="<?= base_url('checkoutCart')?>" class="btn btn-lg btn-success mt-3">Checkout</a>
             <?php endif;?>
         </div>
     </div>

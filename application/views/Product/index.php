@@ -29,19 +29,19 @@
         </div>
             
         </div>
-        <div class="col-md-9">
+        <div class="col-md-9 mt-2">
             <div class="row">
                 <?php foreach($products as $p) :?>
-                <div class="col-md-4">
+                <div class="col-6 col-md-4">
                     <div class="card m-1 text-center">
                         <form action="<?= base_url('insertCart')?>" method="POST">
         
                             <input type="hidden" name="product_id" value="<?= $p->product_id ?>">
         
-                            <img src="<?= $p->product_imageurl?>" class="card-img-top p-1" alt="...">
+                            <img src="<?= $p->product_imageurl?>" class="card-img-top p-1 w-100" alt="...">
                             <div class="card-body">
                                 <h5 class="card-title"><?= $p->product_name ?></h5>
-                                <p class="card-text"><?= $p->product_price ?></p>
+                                <p class="card-text">₺<?= $p->product_price ?></p>
                                 
                             </div>
                             <div class="card-footer">

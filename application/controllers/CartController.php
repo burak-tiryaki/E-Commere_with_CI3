@@ -33,46 +33,50 @@ class CartController extends CI_Controller{
         else
         {
             $this->session->set_flashdata('status','First you need to login.');
-            echo 'go to the login';
-            //redirect(base_url('login'));
+            redirect(base_url('login'));
         }
     }
     
     //add product to cart
     public function insertCart()
     {
-        $data = array(
-            "user_id" => $this->session->userdata("auth_user")["user_id"],
-            "product_id" => $this->input->post('product_id'),
-            "quantity"   => $this->input->post('quantity'),
-        );
-
-        $where=array(
-            "user_id" => $data["user_id"],
-            "product_id" => $data["product_id"]
-        );
-
-        $rowCount = $this->db
-                    ->where($where)
-                    ->count_all_results('cart');
-
-        if($rowCount < 1)
+        if(isset($_SESSION['auth_user']))
         {
-            $check = $this->db->insert('cart',$data);
+            $data = array(
+                "user_id" => $this->session->userdata("auth_user")["user_id"],
+                "product_id" => $this->input->post('product_id'),
+                "quantity"   => $this->input->post('quantity'),
+            );
+    
+            $where=array(
+                "user_id" => $data["user_id"],
+                "product_id" => $data["product_id"]
+            );
+    
+            $rowCount = $this->db
+                        ->where($where)
+                        ->count_all_results('cart');
+    
+            if($rowCount < 1)
+            {
+                $check = $this->db->insert('cart',$data);
+            }
+            else{
+                $dbqty = $this->db->where($where)->get('cart')->row();
+                $newqty = $dbqty + (int)$data["quantity"];
+                $update = $this->db
+                        ->set('quantity',$newqty)
+                        ->where($where)
+                        ->update('cart');
+            }
+            
+                redirect(base_url('cart'));
         }
-        else{
-            $dbqty = $this->db->where($where)->get('cart')->row();
-            $newqty = $dbqty + (int)$data["quantity"];
-            $update = $this->db
-                    ->set('quantity',$newqty)
-                    ->where($where)
-                    ->update('cart');
+        else
+        {
+            $this->session->set_flashdata('status','First you need to login.');
+            redirect(base_url('login'));
         }
-
-        
-
-        
-            redirect(base_url('cart'));
         
     }
 
@@ -85,7 +89,7 @@ class CartController extends CI_Controller{
         );
 
         $where=array(
-            "user_id" => $data["user_id"],
+            "user_id" => (int)$data["user_id"],
             "product_id" => $data["product_id"]
         );
 
@@ -122,5 +126,29 @@ class CartController extends CI_Controller{
             $this->session->set_flashdata('status','Cart is cleared.');
 
         redirect(base_url('cart'));
+    }
+
+    public function checkoutCart()
+    {
+        $CartModel = new CartModel();
+        if(isset($_SESSION['auth_user']))
+        {
+            $userId = $this->session->userdata('auth_user')["user_id"];
+            
+            $cartLines = $CartModel->getCartForOrder($userId);
+            
+            if($cartLines != FALSE)
+            {
+                $lastOrderId = $CartModel->createOrder($userId);
+                $deneme = $CartModel->createOrderDetail($lastOrderId->order_id,$cartLines);
+
+                redirect(base_url('orderSuccess/').$lastOrderId->order_id);
+            }
+            else{
+                //User cart is empty
+            }
+        }
+
+        
     }
 }
